@@ -54,7 +54,8 @@
 
 (deftest all-phrases-test
   (testing "all-phrases fail."
-    (is (= (all-phrases "tat") (list "a a a" "a aa" "a at" "a ta" "aa a" "at a" "ta a" "att" "tat")))
+    (is (= (all-phrases "tat") (list "att" "tat")))
+    (is (= (all-phrases "taa") (list "a at" "a ta" "at a" "ta a")))
   ))
 
 (deftest phrase-anagrams-test

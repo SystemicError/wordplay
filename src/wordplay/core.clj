@@ -60,20 +60,19 @@
   )
 
 (defn all-phrases
-  "Returns all phrases with as many letters as letters and which consist of only words that use letters in letters."
+  "Returns all anagrams of a string of letters with no spaces."
   [letters]
   (loop [words (filter #(<= (count %) (count letters)) (words-that-use-only letters))
          partial-phrases (filter #(< (count %) (count letters)) words)
-         complete-phrases (filter #(= (count %) (count letters)) words)]
+         complete-phrases (filter #(and (= (count %) (count letters)) (uses-letters letters %)) words)]
     (if (empty? partial-phrases)
       complete-phrases
       ; append all words to all partial phrases, moving
       ; any that are as long as letters to complete-phrases
       ; and deleting any that are larger
-      (let [appended (concat (for [p partial-phrases w words] (str p " " w)))
-            completed (filter #(= (count letters) (count (no-spaces %))) appended)
-            dummy (println "\nwords:  " words "\npp:  " partial-phrases
-                           "\ncp:  " complete-phrases)]
+      ;                       or overuse letters
+      (let [appended (concat (filter #(uses-letters letters (no-spaces %)) (for [p partial-phrases w words] (str p " " w))))
+            completed (filter #(= (count letters) (count (no-spaces %))) appended)]
         (recur words
                (filter #(< (count (no-spaces %)) (count letters)) appended)
                (concat completed complete-phrases)))))
