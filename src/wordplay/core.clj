@@ -53,16 +53,34 @@
   (filter #(uses-only-letters % letters) (all-words))
   )
 
+(defn no-spaces
+  "Removes spaces from a string."
+  [word]
+  (str/replace word " " "")
+  )
+
 (defn all-phrases
   "Returns all phrases with as many letters as letters and which consist of only words that use letters in letters."
   [letters]
-  (let [words (words-that-use-only letters)]
-    nil)
+  (loop [words (filter #(<= (count %) (count letters)) (words-that-use-only letters))
+         partial-phrases (filter #(< (count %) (count letters)) words)
+         complete-phrases (filter #(= (count %) (count letters)) words)]
+    (if (empty? partial-phrases)
+      complete-phrases
+      ; append all words to all partial phrases, moving
+      ; any that are as long as letters to complete-phrases
+      ; and deleting any that are larger
+      (let [appended (concat (for [p partial-phrases w words] (str p " " w)))
+            completed (filter #(= (count letters) (count (no-spaces %))) appended)
+            dummy (println "\nwords:  " words "\npp:  " partial-phrases
+                           "\ncp:  " complete-phrases)]
+        (recur words
+               (filter #(< (count (no-spaces %)) (count letters)) appended)
+               (concat completed complete-phrases)))))
   )
 
 (defn phrase-anagrams
   "Returns combinations of words that are anagrams of a given phrase."
   [phrase]
-  (let [no-spaces (str/replace phrase " " "")]
-    (filter #(anagram? % no-spaces) (all-phrases no-spaces)))
+  (filter #(anagram? (no-spaces %) (no-spaces phrase)) (all-phrases (no-spaces phrase)))
   )

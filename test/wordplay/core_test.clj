@@ -46,3 +46,18 @@
     (is (false? (anagram? "shelf" "kflesh")))
     (is (false? (anagram? "shelf" "lesh")))
   ))
+
+(deftest no-spaces-test
+  (testing "no-spaces fail."
+    (is (= (no-spaces "a b c ") "abc"))
+  ))
+
+(deftest all-phrases-test
+  (testing "all-phrases fail."
+    (is (= (all-phrases "tat") (list "a a a" "a aa" "a at" "a ta" "aa a" "at a" "ta a" "att" "tat")))
+  ))
+
+(deftest phrase-anagrams-test
+  (testing "phrase-anagrams fail."
+    (is (= (phrase-anagrams "i am") (list "a mi" "am i" "i am" "i ma" "ma i" "mi a" "aim" "ami")))
+  ))
