@@ -81,5 +81,5 @@
 (defn phrase-anagrams
   "Returns combinations of words that are anagrams of a given phrase."
   [phrase]
-  (filter #(anagram? (no-spaces %) (no-spaces phrase)) (all-phrases (no-spaces phrase)))
+  (all-phrases (no-spaces phrase))
   )
